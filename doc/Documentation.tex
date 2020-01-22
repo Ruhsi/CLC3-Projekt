@@ -80,11 +80,13 @@ Die Build-, Test- und Deploymentvorgänge werden mithilfe von Openshift-Pipeline
 
 \section{Projektstruktur}
 \begin{enumerate}
-	\item SCAAnalyzerService
+	\item SCAAnalyzerService: Das SCAAnalyzerService ist ein PythonService zum Analysieren von ScreenCasts.
 	
-	\item SCAPersistService
+	\item SCAPersistService: Das SCAPersistService ist mit Quarkus implementiert. Quarkus ist der Nachfolger von Thorntail, was eine abgespeckte Version des Wildfly war. Quarkus ist eine full-stack, kubernetes-native Java framework und ist darauf optimiert darauf, dass Quarkus-Anwendungen in Kubernetes laufen.
+	Es ist eine effektive Plattform für serverless, cloud und Kubernetes Umgebungen.
+	Das SCAPersistService bietet dabei die Möglichkeit bereits analysierte Videos in einer MongoDB zu speichern und wieder abzurufen.	
 	
-	\item SCAAngularFrontend
+	\item SCAAngularFrontend: Das Frontend ist mit Angular 8 implementiert und bietet eine graphische Oberfläche zur Interaktion mit den beiden Service. Grundsätzlich kann sich im Frontend ein User über sein Google-Konto anmelden und dort entweder seine Google-Konto Infos abrufen, ein Video hochladen und dies analysieren oder ein analysiertes Video speichern und in einem Archiv aufrufen.
 	
 \end{enumerate}
 
@@ -157,11 +159,15 @@ Exposen der Route: \newline
 \section{Fragestellungen}
 \subsection{Automated Infrastructue Provisioning/(Infrastructure-as-Code). Wie wurde im vorliegenden Projekt Automated Infrastructure Provisioning berücksichtigt?}
 
+
 \subsection{Skalierbarkeit. Wie wurde im vorliegenden Projekt Skalierbarkeit berücksichtigt?}
+
 
 \subsection{Ausfallssicherheit.  Wie wurde im vorliegenden Projekt Ausfallssicherheit berücksichtigt?}
 
+
 \subsection{NoSql. Welchen Beitrag leistet NoSql in der vorliegenden Problemstellung?}
+
 
 \subsection{Replikation. Wo nutzen Sie im gegenständlichen Projekt Daten-Replikation?}
 
