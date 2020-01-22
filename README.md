@@ -27,14 +27,23 @@ In OpenShift sieht die Architektur wie folgt aus:
 * **https://microprofile.io/:** Eine Initiative um Java EE für Microsservice-Architekturen zu optimieren. Unterschiedliche Metriken, wie Health, Count, Timed, ...
 * **https://www.jaegertracing.io/:** Ein Framework zum Monitoren von Microservices.
 * **https://www.openshift.com/:** Ist eine Container-Plattform von Redhat, welche auf Docker und Kubernetes aufbaut.
-* **http://fabric8.io/:** Hier wird das Maven-Plugin verwendet. Fabric8 vereinfacht und automatisiert das Deployment in OpenShift.
 * **https://jenkins.io/** Automation Server für automatisierte Build-, Test- und Deploymentvorgänge.
 
 
-### Setup
-TODO
 
-### OpenShift - beide
+### Setup
+TODO Codeready Container
+2) In gewünschtes Verzeichnis entpacken und PATH Variable um dieses Verzeichnis erweitern
+3) Docker starten (muss laufen damit Openshift Cluster gestartet werden kann, basiert auf Docker-Images)
+4) <code>oc cluster up</code>: startet einen neuen Cluster
+5) <code>oc login</code>: am lokalen Cluster anmelden (fabric8 deployed in den Cluster an dem man aktuell eingeloggt ist) -> USER/PASSWORT kann beliebig gewählt werden , 
+6) <code>oc new-project [PROJEKTNAME]</code>: Legt ein neues Projekt an
+7) <code>oc process -f https://raw.githubusercontent.com/jaegertracing/jaeger-openshift/master/all-in-one/jaeger-all-in-one-template.yml | oc create -f -</code>: Deployt ein vorgefertigtes Jaeger Template
+8) <code>oc process -f https://raw.githubusercontent.com/sabre1041/openshift-api-swagger/master/openshift-api-swagger-template.yml | oc apply -f-</code>: Deployt ein vorgefertigtes SwaggerUI Template
+9) <code>mvn fabric8:deploy -Pfabric8</code>: Muss in dem Root-Verzeichnis des jeweiligen Services ausgeführt werden. Deployt das Service in OpenShift.
+
+
+### OpenShift
 OpenShift ist eine OpenSource Container Application Platform und setzt auf Kubernetes auf.
 Nach dem Befehl <code>oc cluster up</code> kann unter **localhost:8443** die grafische Oberfläche aufgerufen werden.
 Sind bereits Services in OpenShift deployt, sieht dies wie folgt aus:
