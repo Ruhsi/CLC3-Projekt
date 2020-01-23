@@ -1,4 +1,4 @@
-\documentclass[11pt, a4paper, twoside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\documentclass[11pt, a4paper]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
 
 \usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
 \usepackage{pdfpages}
@@ -19,21 +19,13 @@
 % =============================================
 % Layout & Colors
 % =============================================
-\geometry{
-   a4paper,
-   total={210mm,297mm},
-   left=20mm,
-   right=20mm,
-   top=20mm,
-   bottom=30mm
- }	
 
 \definecolor{myred}{rgb}{0.8,0,0}
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
 \definecolor{mymauve}{rgb}{0.58,0,0.82}
 
-\setcounter{secnumdepth}{4}
+
 
 
 % the default java directory structure and the main packages
@@ -62,9 +54,8 @@
 \renewcommand{\footrulewidth}{0.4pt}
 
 
-\pagestyle{fancy}
 \begin{document}
-\setlength{\headheight}{15mm}
+
 
 \section{Dokumentation - CLC3 - Projekt}
 Marko Gattringer, Christoph Ruhsam
@@ -177,20 +168,23 @@ Dadurch werden die 4 folgenden Grundsätze von Infrastructure as Code in unserem
 
 
 \subsection{Skalierbarkeit. Wie wurde im vorliegenden Projekt Skalierbarkeit berücksichtigt?}
+In der Oberfläche von OpenShift kann ein Service per Hand rauf- und runterskaliert werden. Dies kann natürlich auch automatisch je nach Auslastung eingestellt werden.
+OpenShift übernimmt dabei selbst das Scheduling und das Load Balancing.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.27]{\imageDir/service_scale_up.png}
-	\caption[Scale Up- Funktion]
+	\caption{Scale Up- Funktion}
 \end{figure}
 
 
 \subsection{Ausfallssicherheit.  Wie wurde im vorliegenden Projekt Ausfallssicherheit berücksichtigt?}
-
+Grundsätzlich regelt die Ausfallsicherheit der Service OpenShift selbst. Das größte Problem hierbei wäre wenn die bestimmte Region ausfällt. Dazu müsste man ein Replika auf einer anderen Region deployen.
 
 \subsection{NoSql. Welchen Beitrag leistet NoSql in der vorliegenden Problemstellung?}
-
+Bei unseren Daten handelt es sich nicht um heikle Daten und auch nicht um Daten, wo zwingend ein Schema benötigt wird. Da bietet sich eine MongoDB gut an, da grundsätzlich unsere Daten auch schon in Form von JSON vorhanden sind und MongoDB auch bei größeren Daten auch noch performant ist. 
 
 \subsection{Replikation. Wo nutzen Sie im gegenständlichen Projekt Daten-Replikation?}
+Replikation wird lediglich bei der Datenbank benötigt. Alle anderen Services, sowie die GUI sind stateless. Dies wurde in unserer Anwendung jedoch nicht umgesetzt.
 
 \subsection{Kosten. Welche Kosten verursacht Ihre Lösung? Welchen monetären Vorteil hat diese Lösung gegenüber einer Nicht-Cloud-Lösung?}
 \end{document}
