@@ -71,7 +71,7 @@ Die Build-, Test- und Deploymentvorgänge werden mithilfe von Openshift-Pipeline
 
 \section{Projektstruktur}
 \begin{enumerate}
-	\item SCAAnalyzerService: Das SCAAnalyzerService ist ein PythonService zum Analysieren von ScreenCasts.
+	\item SCAAnalyzerService: Das SCAAnalyzerService ist ein PythonService zum Analysieren von ScreenCasts. Dazu läuft im Hintergrund ein neuronales Netz welches den Analyseteil übernimmt. Das Service selbst wird mithilfe von Flask als REST-Service angeboten.
 	
 	\item SCAPersistService: Das SCAPersistService ist mit Quarkus implementiert. Quarkus ist der Nachfolger von Thorntail, was eine abgespeckte Version des Wildfly war. Quarkus ist eine full-stack, kubernetes-native Java framework und ist darauf optimiert darauf, dass Quarkus-Anwendungen in Kubernetes laufen.
 	Es ist eine effektive Plattform für serverless, cloud und Kubernetes Umgebungen.
@@ -100,30 +100,29 @@ In OpenShift sieht die Architektur wie folgt aus:
 
 \section{Setup}
 \begin{enumerate}
-	\item TODO Codeready Container
-	\item In gewünschtes Verzeichnis entpacken und PATH Variable um dieses Verzeichnis erweitern
-	\item Docker starten (muss laufen damit Openshift Cluster gestartet werden kann, basiert auf Docker-Images)
-	\item \textbf{oc cluster up}: startet einen neuen Cluster
-	\item \textbf{oc login}: am lokalen Cluster anmelden (fabric8 deployed in den Cluster an dem man aktuell eingeloggt ist) -> USER/PASSWORT kann beliebig gewählt werden
+	\item Um einen lokalen Openshift-Cluster zu starten, kann ab Version 4 das CodeReadyContainer-Framework von RedHat verwendet werden. Dazu einfach das Paket von \url{https://access.redhat.com/documentation/en-us/red_hat_codeready_containers/1.3/html/getting_started_guide/getting-started-with-codeready-containers_gsg} für die gewünschte Plattform herunterladen und in gewünschtes Verzeichnis entpacken. Diese Paket enthält schon alles um den lokalen Openshift-Cluster zu starten (kein Docker mehr notwendig -> keine lästigen Versionspropbleme)
+	\item Die PATH-Variable um dieses Verzeichnis erweitern, damit das Terminal die CLI erkennt.
+	\item \textbf{crc start}: startet einen lokalen Cluster
+	\item \textbf{oc login}: am lokalen Cluster anmelden (fabric8 deployed in den Cluster an dem man aktuell eingeloggt ist) $\rightarrow$ USER/PASSWORT kann beliebig gewählt werden
 	\item \textbf{oc new-project [PROJEKTNAME]}: Legt ein neues Projekt an
+	\item Wird mit einer komplett neuen Entwicklung begonnen, kann mithilfe von \textbf{oc new-app} (siehe auch https://docs.openshift.com/container-platform/4.2/welcome/index.html) eine neue Anwendung deployed werden. Openshift übernimmt hier im Hintergrund alle Aufgaben, von Deployment, über BuildPipeline einrichten und Git-Webhook erzeugen. 
 	\item \textbf{oc process -f https://raw.githubusercontent.com/jaegertracing/jaeger-openshift/master/all-in-one/jaeger-all-in-one-template.yml | oc create -f -}: Deployt ein vorgefertigtes Jaeger Template
 	\item \textbf{oc process -f https://raw.githubusercontent.com/sabre1041/openshift-api-swagger/master/openshift-api-swagger-template.yml | oc apply -f-}: Deployt ein vorgefertigtes SwaggerUI Template
 \end{enumerate}
 
 \section{OpenShift}
 OpenShift ist eine OpenSource Container Application Platform und setzt auf Kubernetes auf.
-Nach dem Befehl \textbf{oc cluster up} kann unter \textit{localhost:8443} die grafische Oberfläche aufgerufen werden.
+Nach dem Befehl \textbf{crc start} kann unter \textit{localhost:8443} die grafische Oberfläche aufgerufen werden (oder mithilfe von \textbf{crc console} ).
 Sind bereits Services in OpenShift deployt, sieht dies wie folgt aus:
-TODO image from OpenShift
+siehe Abbildung \ref{fig:OpenShift}
 
-Ein Service kann auf hinauf-/heruntergescaled werden. Dadurch können mehrere Pods gestartet werden. Das Load-Balancing wird von OpenShift übernommen.
-TODO image from OpenShift Projekt
+Ein Service kann auf hinauf-/heruntergescaled werden. Dadurch können mehrere Pods gestartet werden. Das Load-Balancing wird von OpenShift übernommen. (siehe \ref{fig:scale})
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.25]{\imageDir/openshift_overview.png}
-	\caption[OpenShift]
-	
+	\caption{Anwendungsübersicht OpenShift}
+	\label{fig:OpenShift}
 \end{figure}
 
 \section{OpenTracing mit Jaeger}
@@ -174,6 +173,7 @@ OpenShift übernimmt dabei selbst das Scheduling und das Load Balancing.
 	\centering
 	\includegraphics[scale=0.27]{\imageDir/service_scale_up.png}
 	\caption{Scale Up- Funktion}
+	\label{fig:scale}
 \end{figure}
 
 
@@ -187,4 +187,8 @@ Bei unseren Daten handelt es sich nicht um heikle Daten und auch nicht um Daten,
 Replikation wird lediglich bei der Datenbank benötigt. Alle anderen Services, sowie die GUI sind stateless. Dies wurde in unserer Anwendung jedoch nicht umgesetzt.
 
 \subsection{Kosten. Welche Kosten verursacht Ihre Lösung? Welchen monetären Vorteil hat diese Lösung gegenüber einer Nicht-Cloud-Lösung?}
+
+Für diese kleine Anwendung reicht vermutlich der \enquote{Starter-Plan} von OpenShift. Dieser ist kostenlos. \\
+Für etwas größere Anwendung (10 Projekte, 2GB Speicher) kostet zum Beispiel der \enquote{Pro-Plan} von RedHat 50 Dollar pro Monat pro Region. Da Openshift aber grundsätzlich bei den meisten Anbietern gehostet werden kann (AWS, Azure, Google, ITAndTel, ...) ist man hier sehr flexibel und kann das am besten passende Angebot für sich selbst heraus suchen.
+
 \end{document}
