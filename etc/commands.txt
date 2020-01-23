@@ -1,0 +1,23 @@
+
+oc new-app -e MONGODB_USER=test -e MONGODB_PASSWORD=test -e MONGODB_DATABASE=sca -e MONGODB_ADMIN_PASSWORD=test centos/mongodb-34-centos7
+oc expose svc/mongodb-24-centos7
+
+oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift~https://github.com/Ruhsi/CLC3-Projekt.git --context-dir=SCAPersistService --name=sca-persist-service
+oc expose svc/sca-persist-servic
+
+oc new-app https://github.com/Ruhsi/CLC3-Projekt.git --context-dir=SCAAnalyzerService --name=sca-analyze-service
+oc expose svc/sca-analyze-service
+
+oc new-app mprahl/s2i-angular-httpd24~https://github.com/Ruhsi/CLC3-Projekt.git --context-dir=SCAAngularFrontend/src/main/angular --name=sca-frontend
+oc expose svc/sca-frontend
+
+MITTELS Openshift Operators vorher installieren, dann mit:
+oc expose svc/jaeger-all-in-one-inmemory-collector
+veröffentlichen
+
+
+oc delete all -l app=sca-persist-service
+oc delete all -l app=sca-analyze-service
+oc delete all -l app=sca-frontend
+
+

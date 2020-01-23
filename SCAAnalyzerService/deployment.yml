@@ -1,0 +1,94 @@
+kind: DeploymentConfig
+apiVersion: apps.openshift.io/v1
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  selfLink: >-
+    /apis/apps.openshift.io/v1/namespaces/sca-project/deploymentconfigs/sca-analyze-service
+  resourceVersion: '307480'
+  name: sca-analyze-service
+  uid: bcf53b26-3b89-11ea-8297-0a580a800198
+  creationTimestamp: '2020-01-20T13:35:35Z'
+  generation: 2
+  namespace: sca-project
+  labels:
+    app: sca-analyze-service
+spec:
+  strategy:
+    type: Rolling
+    rollingParams:
+      updatePeriodSeconds: 1
+      intervalSeconds: 1
+      timeoutSeconds: 600
+      maxUnavailable: 25%
+      maxSurge: 25%
+    resources: {}
+    activeDeadlineSeconds: 21600
+  triggers:
+    - type: ConfigChange
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+          - sca-analyze-service
+        from:
+          kind: ImageStreamTag
+          namespace: sca-project
+          name: 'sca-analyze-service:latest'
+        lastTriggeredImage: >-
+          image-registry.openshift-image-registry.svc:5000/sca-project/sca-analyze-service@sha256:5abb9dc862cecc511ba4ffb8ca21bf69116706d8b6ac21325c73bee1fe3ef07d
+  replicas: 1
+  revisionHistoryLimit: 10
+  test: false
+  selector:
+    app: sca-analyze-service
+    deploymentconfig: sca-analyze-service
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: sca-analyze-service
+        deploymentconfig: sca-analyze-service
+      annotations:
+        openshift.io/generated-by: OpenShiftNewApp
+    spec:
+      containers:
+        - name: sca-analyze-service
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/sca-project/sca-analyze-service@sha256:5abb9dc862cecc511ba4ffb8ca21bf69116706d8b6ac21325c73bee1fe3ef07d
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+status:
+  observedGeneration: 2
+  details:
+    message: config change
+    causes:
+      - type: ConfigChange
+  availableReplicas: 1
+  unavailableReplicas: 0
+  latestVersion: 1
+  updatedReplicas: 1
+  conditions:
+    - type: Progressing
+      status: 'True'
+      lastUpdateTime: '2020-01-20T13:39:12Z'
+      lastTransitionTime: '2020-01-20T13:38:44Z'
+      reason: NewReplicationControllerAvailable
+      message: replication controller "sca-analyze-service-1" successfully rolled out
+    - type: Available
+      status: 'True'
+      lastUpdateTime: '2020-01-23T10:52:09Z'
+      lastTransitionTime: '2020-01-23T10:52:09Z'
+      message: Deployment config has minimum availability.
+  replicas: 1
+  readyReplicas: 1

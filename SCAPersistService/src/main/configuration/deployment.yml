@@ -1,0 +1,99 @@
+kind: DeploymentConfig
+apiVersion: apps.openshift.io/v1
+metadata:
+  annotations:
+    app.openshift.io/connects-to: mongodb-34-centos7
+    openshift.io/generated-by: OpenShiftNewApp
+  selfLink: >-
+    /apis/apps.openshift.io/v1/namespaces/sca-project/deploymentconfigs/sca-persist-service
+  resourceVersion: '307424'
+  name: sca-persist-service
+  uid: 60ba0550-3b87-11ea-88f0-0a580a800156
+  creationTimestamp: '2020-01-20T13:18:41Z'
+  generation: 2
+  namespace: sca-project
+  labels:
+    app: sca-persist-service
+spec:
+  strategy:
+    type: Rolling
+    rollingParams:
+      updatePeriodSeconds: 1
+      intervalSeconds: 1
+      timeoutSeconds: 600
+      maxUnavailable: 25%
+      maxSurge: 25%
+    resources: {}
+    activeDeadlineSeconds: 21600
+  triggers:
+    - type: ConfigChange
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+          - sca-persist-service
+        from:
+          kind: ImageStreamTag
+          namespace: sca-project
+          name: 'sca-persist-service:latest'
+        lastTriggeredImage: >-
+          image-registry.openshift-image-registry.svc:5000/sca-project/sca-persist-service@sha256:49685fe32739ee31ae60baf2be33b2733af7ec47126bf1002a2219a6b3f8849c
+  replicas: 1
+  revisionHistoryLimit: 10
+  test: false
+  selector:
+    app: sca-persist-service
+    deploymentconfig: sca-persist-service
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: sca-persist-service
+        deploymentconfig: sca-persist-service
+      annotations:
+        openshift.io/generated-by: OpenShiftNewApp
+    spec:
+      containers:
+        - name: sca-persist-service
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/sca-project/sca-persist-service@sha256:49685fe32739ee31ae60baf2be33b2733af7ec47126bf1002a2219a6b3f8849c
+          ports:
+            - containerPort: 8443
+              protocol: TCP
+            - containerPort: 8778
+              protocol: TCP
+            - containerPort: 8080
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+status:
+  observedGeneration: 2
+  details:
+    message: config change
+    causes:
+      - type: ConfigChange
+  availableReplicas: 1
+  unavailableReplicas: 0
+  latestVersion: 1
+  updatedReplicas: 1
+  conditions:
+    - type: Progressing
+      status: 'True'
+      lastUpdateTime: '2020-01-20T13:22:17Z'
+      lastTransitionTime: '2020-01-20T13:22:17Z'
+      reason: NewReplicationControllerAvailable
+      message: replication controller "sca-persist-service-1" successfully rolled out
+    - type: Available
+      status: 'True'
+      lastUpdateTime: '2020-01-23T10:52:03Z'
+      lastTransitionTime: '2020-01-23T10:52:03Z'
+      message: Deployment config has minimum availability.
+  replicas: 1
+  readyReplicas: 1

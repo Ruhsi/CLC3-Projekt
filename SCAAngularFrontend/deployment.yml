@@ -1,0 +1,97 @@
+kind: DeploymentConfig
+apiVersion: apps.openshift.io/v1
+metadata:
+  annotations:
+    app.openshift.io/connects-to: 'sca-analyze-service,sca-persist-service'
+    openshift.io/generated-by: OpenShiftNewApp
+  selfLink: >-
+    /apis/apps.openshift.io/v1/namespaces/sca-project/deploymentconfigs/sca-frontend
+  resourceVersion: '307462'
+  name: sca-frontend
+  uid: 997ecdb3-3b81-11ea-88f0-0a580a800156
+  creationTimestamp: '2020-01-20T12:37:20Z'
+  generation: 2
+  namespace: sca-project
+  labels:
+    app: sca-frontend
+spec:
+  strategy:
+    type: Rolling
+    rollingParams:
+      updatePeriodSeconds: 1
+      intervalSeconds: 1
+      timeoutSeconds: 600
+      maxUnavailable: 25%
+      maxSurge: 25%
+    resources: {}
+    activeDeadlineSeconds: 21600
+  triggers:
+    - type: ConfigChange
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+          - sca-frontend
+        from:
+          kind: ImageStreamTag
+          namespace: sca-project
+          name: 'sca-frontend:latest'
+        lastTriggeredImage: >-
+          image-registry.openshift-image-registry.svc:5000/sca-project/sca-frontend@sha256:635a6e5265c7aecb7a124c6d654dc48d3de5a49a69025b87ea1cf3a1495769cd
+  replicas: 1
+  revisionHistoryLimit: 10
+  test: false
+  selector:
+    app: sca-frontend
+    deploymentconfig: sca-frontend
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: sca-frontend
+        deploymentconfig: sca-frontend
+      annotations:
+        openshift.io/generated-by: OpenShiftNewApp
+    spec:
+      containers:
+        - name: sca-frontend
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/sca-project/sca-frontend@sha256:635a6e5265c7aecb7a124c6d654dc48d3de5a49a69025b87ea1cf3a1495769cd
+          ports:
+            - containerPort: 8443
+              protocol: TCP
+            - containerPort: 8080
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+status:
+  observedGeneration: 2
+  details:
+    message: config change
+    causes:
+      - type: ConfigChange
+  availableReplicas: 1
+  unavailableReplicas: 0
+  latestVersion: 1
+  updatedReplicas: 1
+  conditions:
+    - type: Progressing
+      status: 'True'
+      lastUpdateTime: '2020-01-20T12:40:27Z'
+      lastTransitionTime: '2020-01-20T12:40:27Z'
+      reason: NewReplicationControllerAvailable
+      message: replication controller "sca-frontend-1" successfully rolled out
+    - type: Available
+      status: 'True'
+      lastUpdateTime: '2020-01-23T10:52:07Z'
+      lastTransitionTime: '2020-01-23T10:52:07Z'
+      message: Deployment config has minimum availability.
+  replicas: 1
+  readyReplicas: 1
