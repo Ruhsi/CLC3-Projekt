@@ -66,7 +66,7 @@
 \begin{document}
 \setlength{\headheight}{15mm}
 
-\section{Dokumentation - CLC - Projekt}
+\section{Dokumentation - CLC3 - Projekt}
 Marko Gattringer, Christoph Ruhsam
 
 \subsection{Kurzbeschreibung}
@@ -128,6 +128,13 @@ TODO image from OpenShift
 Ein Service kann auf hinauf-/heruntergescaled werden. Dadurch können mehrere Pods gestartet werden. Das Load-Balancing wird von OpenShift übernommen.
 TODO image from OpenShift Projekt
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.25]{\imageDir/openshift_overview.png}
+	\caption[OpenShift]
+	
+\end{figure}
+
 \section{OpenTracing mit Jaeger}
 Jaeger ist ein Tracing System, das OpenSource zur Verfügung steht. Es wird für Monitoring und Troubleshooting bei Microservice-Architekturen verwendet.
 Um Jaeger mit Thorntail und JavaEE verwenden zu können, werden folgende Teile benötigt:
@@ -158,9 +165,23 @@ Exposen der Route: \newline
 
 \section{Fragestellungen}
 \subsection{Automated Infrastructue Provisioning/(Infrastructure-as-Code). Wie wurde im vorliegenden Projekt Automated Infrastructure Provisioning berücksichtigt?}
+Beim Deployen der Services erzeugt OpenShift ein \textbf{deployment.yaml} mit Standardwerten. Dieses kann je nach Bedarf modifiziert werden. Werden nun System mit diesem deployment.yaml erzeugt, bleiben diese konsistent. Solange Änderungen auch nur in diesem Konfigurations-File durchgeführt werden, bleibt das System auch konsistent und kann jederzeit reproduziert werden.
+Dadurch werden die 4 folgenden Grundsätze von Infrastructure as Code in unserem Projekt umgesetzt.
+
+\begin{itemize}
+	\item Systeme sind reproduzierbar
+	\item Systeme sind wegwerfbar
+	\item Systeme sind konsistent
+	\item Aktionen sind wiederholbar
+\end{itemize}
 
 
 \subsection{Skalierbarkeit. Wie wurde im vorliegenden Projekt Skalierbarkeit berücksichtigt?}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.27]{\imageDir/service_scale_up.png}
+	\caption[Scale Up- Funktion]
+\end{figure}
 
 
 \subsection{Ausfallssicherheit.  Wie wurde im vorliegenden Projekt Ausfallssicherheit berücksichtigt?}
